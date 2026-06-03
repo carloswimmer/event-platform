@@ -4,17 +4,14 @@ import { Route, Routes, Link } from 'react-router-dom';
 
 export function App() {
   return (
+    <>
     <div>
-      <NxWelcome title="web" />
 
       {/* START: routes */}
       {/* These routes and navigation have been generated for you */}
       {/* Feel free to move and update them to fit your needs */}
-      <br />
-      <hr />
-      <br />
-      <div role="navigation">
-        <ul>
+      <div className='m-4' role="navigation">
+        <ul className='flex gap-4'>
           <li>
             <Link to="/">Home</Link>
           </li>
@@ -27,7 +24,7 @@ export function App() {
         <Route
           path="/"
           element={
-            <div>
+            <div className='ml-4'>
               This is the generated root route.{' '}
               <Link to="/page-2">Click here for page 2.</Link>
             </div>
@@ -36,14 +33,17 @@ export function App() {
         <Route
           path="/page-2"
           element={
-            <div>
-              <Link to="/">Click here to go back to root page.</Link>
+            <div className='ml-4'>
+              <Link  to="/">Click here to go back to root page.</Link>
             </div>
           }
         />
       </Routes>
       {/* END: routes */}
+
     </div>
+      <NxWelcome title="web" />
+    </>
   );
 }
 
