@@ -1,8 +1,8 @@
 # Event Registration Platform — Tutorial Specification
 
-> **Purpose:** Hands-on tutorial to remember **Redux**, **Express**, and **MongoDB** by rebuilding the in-memory `EventSystem` as a full-stack app inside an **Nx monorepo**, with **React**, **Redux Toolkit + RTK Query**, **Tailwind CSS**, and a **MongoDB ORM**.
+> **Purpose:** Hands-on tutorial to remember **Redux**, **Express**, and **MongoDB** by building a full-stack app in an **Nx monorepo** with **layered Express**, **Mongoose repositories**, and **domain use-cases** — not an in-memory kata port.
 
-> **Reference implementation:** `./refer/event-system.ts` and `./refer/event-system.test.ts` in this folder define the canonical domain rules and return-code contract.
+> **Reference (`./refer/`):** Defines **business rules** and **acceptance scenarios** only. See [`.cursor/plan.md`](./plan.md) for architecture (routes → controllers → services → repositories; domain ports + use-cases).
 
 ---
 
@@ -46,10 +46,11 @@ After completing the tutorial, you should be able to:
 event-platform/
 ├── apps/
 │   ├── web/                 # React + Redux + RTK Query + Tailwind
-│   └── api/                 # Express + Mongoose + REST
+│   └── api/                 # Express layers + Mongoose repositories
+│       └── src/             # routes, controllers, services, repositories, models
 ├── libs/
 │   ├── shared-types/        # Skill, EventType, API contracts, result codes
-│   ├── domain/              # Pure domain service (optional port of EventSystem logic)
+│   ├── domain/              # Validators, use-cases, repository ports (no Mongoose)
 │   └── ui/                  # Optional shared Tailwind components
 ├── docker-compose.yml       # MongoDB for local dev
 └── .env.example
@@ -66,7 +67,8 @@ event-platform/
 **Project boundaries:**
 
 - `libs/shared-types` must not import from `apps/*`.
-- Domain rules live in `libs/domain` (pure TS) and are called from Express handlers — **do not duplicate business rules only in the UI**.
+- Domain rules live in `libs/domain` use-cases (pure TS, repository ports); `apps/api` services orchestrate persistence — **do not duplicate business rules in routes or UI**.
+- **Do not** ship the kata `EventSystem` in-memory arrays as production storage.
 - RTK Query endpoints consume the same DTOs as the API returns.
 
 ---
@@ -285,16 +287,16 @@ Base path: `/api/v1`
 - `npx create-nx-workspace@latest` with React app + Node/Express app.
 - Add `libs/shared-types`, Docker MongoDB, Tailwind to `web`.
 
-### Phase 1 — Domain port
+### Phase 1 — Domain (validators, ports, use-cases)
 
-- Copy logic from `EventSystem` into `libs/domain` as pure functions or a service class.
-- Run ported unit tests (Vitest) — should mirror `./refer/event-system.test.ts` green.
+- Extract validators from `./refer/event-system.ts`; implement use-cases that call repository **ports** (no in-memory app database).
+- Unit-test use-cases with **fake repositories** in `domain/src/testing/`; scenarios mirror `./refer/event-system.test.ts`.
 
 ### Phase 2 — API + ORM
 
-- Mongoose models + seed script.
-- Express routes calling domain service.
-- Supertest/Vitest integration tests copied from kata scenarios (fake timers not needed; use real IDs).
+- Mongoose models + repository implementations of domain ports.
+- Express: routes → controllers → application services → use-cases.
+- Supertest integration tests against test MongoDB; scenarios from refer tests (real ObjectIds, no fake timers).
 
 ### Phase 3 — RTK Query + Redux
 
@@ -323,7 +325,8 @@ Use this when the tutorial is “done”:
 - [ ] RTK Query fetches and mutates with cache invalidation.
 - [ ] Redux DevTools shows `ui` slice updates.
 - [ ] Tailwind UI shows create/register/cancel flows with clear feedback for `1`, `0`, `-1`.
-- [ ] ORM (Mongoose) schemas match domain entities; no raw driver-only access required in handlers.
+- [ ] Layered API (routes/controllers/services/repositories); domain use-cases + ports; no production `EventSystem` arrays.
+- [ ] Mongoose repositories implement ports; handlers do not embed business rules.
 
 ---
 
@@ -384,8 +387,9 @@ nx test domain
 
 | File | Role |
 |------|------|
-| `./refer/event-system.ts` | Canonical business logic and return codes |
-| `./refer/event-system.test.ts` | Acceptance tests to port to API/integration layer |
-| `spec.md` | Tutorial generator input (this document) |
+| `./refer/event-system.ts` | Business rules reference (not architecture to copy) |
+| `./refer/event-system.test.ts` | Acceptance scenarios for domain + API tests |
+| `plan.md` | Tutorial steps and Express layering |
+| `spec.md` | This document (NFRs, API surface, rules) |
 
-When implementing, **treat the reference class as the source of truth** for rule disputes; update this spec if you intentionally extend behavior (e.g. unique emails, auth).
+**Rule disputes:** match `./refer/`. **Architecture:** match `plan.md`.
