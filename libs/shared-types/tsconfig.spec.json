@@ -2,12 +2,14 @@
 	"extends": "./tsconfig.json",
 	"compilerOptions": {
 		"outDir": "../dist/out-tsc",
+		"module": "esnext",
+		"moduleResolution": "bundler",
+		"target": "es2022",
 		"types": [
 			"vitest/globals",
 			"vitest/importMeta",
 			"vite/client",
-			"node",
-			"vitest"
+			"node"
 		]
 	},
 	"include": [

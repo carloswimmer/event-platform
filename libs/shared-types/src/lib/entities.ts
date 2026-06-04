@@ -17,5 +17,5 @@ export interface ParticipantDto {
 export interface WaitlistEntryDto {
 	eventId: string;
 	participantId: string;
-	createdAt?: string;
+	createdAt: string;
 }
