@@ -15,8 +15,7 @@ export class InMemoryWaitlistRepository implements WaitlistRepository {
 		return (
 			this.entries.find(
 				(entry) =>
-					entry.eventId === eventId &&
-					entry.participantId === participantId,
+					entry.eventId === eventId && entry.participantId === participantId,
 			) ?? null
 		);
 	}
@@ -35,17 +34,14 @@ export class InMemoryWaitlistRepository implements WaitlistRepository {
 	async remove(eventId: string, participantId: string): Promise<void> {
 		const index = this.entries.findIndex(
 			(entry) =>
-				entry.eventId === eventId &&
-				entry.participantId === participantId,
+				entry.eventId === eventId && entry.participantId === participantId,
 		);
 		if (index >= 0) {
 			this.entries.splice(index, 1);
 		}
 	}
 
-	async getFirstForEvent(
-		eventId: string,
-	): Promise<WaitlistEntryDto | null> {
+	async getFirstForEvent(eventId: string): Promise<WaitlistEntryDto | null> {
 		const forEvent = this.entries
 			.filter((entry) => entry.eventId === eventId)
 			.sort((a, b) => a.createdAt.localeCompare(b.createdAt));

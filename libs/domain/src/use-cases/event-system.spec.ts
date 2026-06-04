@@ -1,6 +1,9 @@
 import type { EventType, Skill } from "@event-platform/shared-types";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { createInMemoryRepos, type InMemoryRepos } from "../testing/create-in-memory-repos";
+import {
+	createInMemoryRepos,
+	type InMemoryRepos,
+} from "../testing/create-in-memory-repos";
 import { cancelRegistration } from "./cancel-registration.use-case";
 import { createEvent } from "./create-event.use-case";
 import { createParticipant } from "./create-participant.use-case";
@@ -42,75 +45,108 @@ describe("domain use-cases (reference scenarios)", () => {
 		});
 
 		it("rejects non-positive capacity", async () => {
-			expect((await createEvent(repos.events, { type: "WEBINAR", capacity: 0 })).result).toBe(-1);
-			expect((await createEvent(repos.events, { type: "WEBINAR", capacity: -3 })).result).toBe(-1);
+			expect(
+				(await createEvent(repos.events, { type: "WEBINAR", capacity: 0 }))
+					.result,
+			).toBe(-1);
+			expect(
+				(await createEvent(repos.events, { type: "WEBINAR", capacity: -3 }))
+					.result,
+			).toBe(-1);
 		});
 
 		it("requires valid skill for WORKSHOP", async () => {
-			expect((await createEvent(repos.events, { type: "WORKSHOP", capacity: 5 })).result).toBe(-1);
 			expect(
-				(await createEvent(repos.events, {
-					type: "WORKSHOP",
-					capacity: 5,
-					skill: "EXPERT" as Skill,
-				})).result,
+				(await createEvent(repos.events, { type: "WORKSHOP", capacity: 5 }))
+					.result,
 			).toBe(-1);
 			expect(
-				(await createEvent(repos.events, {
-					type: "WORKSHOP",
-					capacity: 5,
-					skill: "BEGINNER",
-				})).result,
+				(
+					await createEvent(repos.events, {
+						type: "WORKSHOP",
+						capacity: 5,
+						skill: "EXPERT" as Skill,
+					})
+				).result,
+			).toBe(-1);
+			expect(
+				(
+					await createEvent(repos.events, {
+						type: "WORKSHOP",
+						capacity: 5,
+						skill: "BEGINNER",
+					})
+				).result,
 			).toBe(1);
 			expect(repos.events.getAll()[0]?.skill).toBe("BEGINNER");
 		});
 
 		it("allows WEBINAR without skill", async () => {
-			expect((await createEvent(repos.events, { type: "WEBINAR", capacity: 3 })).result).toBe(1);
+			expect(
+				(await createEvent(repos.events, { type: "WEBINAR", capacity: 3 }))
+					.result,
+			).toBe(1);
 			expect(repos.events.getAll()[0]?.skill).toBeUndefined();
 		});
 
 		it("allows CONFERENCE without skill", async () => {
-			expect((await createEvent(repos.events, { type: "CONFERENCE", capacity: 10 })).result).toBe(1);
+			expect(
+				(await createEvent(repos.events, { type: "CONFERENCE", capacity: 10 }))
+					.result,
+			).toBe(1);
 		});
 
 		it("rejects invalid skill when provided for non-WORKSHOP", async () => {
 			expect(
-				(await createEvent(repos.events, {
-					type: "WEBINAR",
-					capacity: 2,
-					skill: "NOPE" as Skill,
-				})).result,
+				(
+					await createEvent(repos.events, {
+						type: "WEBINAR",
+						capacity: 2,
+						skill: "NOPE" as Skill,
+					})
+				).result,
 			).toBe(-1);
 		});
 	});
 
 	describe("createParticipant", () => {
 		it("rejects missing email", async () => {
-			expect((await createParticipant(repos.participants, { email: "" })).result).toBe(-1);
+			expect(
+				(await createParticipant(repos.participants, { email: "" })).result,
+			).toBe(-1);
 		});
 
 		it("rejects invalid skill when provided", async () => {
 			expect(
-				(await createParticipant(repos.participants, {
-					email: "a@b.com",
-					skill: "EXPERT" as Skill,
-				})).result,
+				(
+					await createParticipant(repos.participants, {
+						email: "a@b.com",
+						skill: "EXPERT" as Skill,
+					})
+				).result,
 			).toBe(-1);
 		});
 
 		it("creates participant with email only", async () => {
-			expect((await createParticipant(repos.participants, { email: "guest@mail.com" })).result).toBe(1);
+			expect(
+				(
+					await createParticipant(repos.participants, {
+						email: "guest@mail.com",
+					})
+				).result,
+			).toBe(1);
 			expect(repos.participants.getAll()).toHaveLength(1);
 			expect(repos.participants.getAll()[0]?.email).toBe("guest@mail.com");
 		});
 
 		it("creates participant with email and skill", async () => {
 			expect(
-				(await createParticipant(repos.participants, {
-					email: "p@x.com",
-					skill: "INTERMEDIATE",
-				})).result,
+				(
+					await createParticipant(repos.participants, {
+						email: "p@x.com",
+						skill: "INTERMEDIATE",
+					})
+				).result,
 			).toBe(1);
 			expect(repos.participants.getAll()[0]?.skill).toBe("INTERMEDIATE");
 		});
@@ -123,8 +159,12 @@ describe("domain use-cases (reference scenarios)", () => {
 			const eventId = repos.events.getAll()[0].id;
 			const participantId = repos.participants.getAll()[0].id;
 
-			expect((await registerParticipant(repos, "missing", eventId)).result).toBe(-1);
-			expect((await registerParticipant(repos, participantId, "missing")).result).toBe(-1);
+			expect(
+				(await registerParticipant(repos, "missing", eventId)).result,
+			).toBe(-1);
+			expect(
+				(await registerParticipant(repos, participantId, "missing")).result,
+			).toBe(-1);
 		});
 
 		it("rejects duplicate registration", async () => {
@@ -133,8 +173,12 @@ describe("domain use-cases (reference scenarios)", () => {
 			const eventId = repos.events.getAll()[0].id;
 			const participantId = repos.participants.getAll()[0].id;
 
-			expect((await registerParticipant(repos, participantId, eventId)).result).toBe(1);
-			expect((await registerParticipant(repos, participantId, eventId)).result).toBe(-1);
+			expect(
+				(await registerParticipant(repos, participantId, eventId)).result,
+			).toBe(1);
+			expect(
+				(await registerParticipant(repos, participantId, eventId)).result,
+			).toBe(-1);
 		});
 
 		it("rejects when already on waitlist for the same event", async () => {
@@ -154,22 +198,44 @@ describe("domain use-cases (reference scenarios)", () => {
 
 		it("CONFERENCE requires allowed email domain", async () => {
 			await createEvent(repos.events, { type: "CONFERENCE", capacity: 5 });
-			await createParticipant(repos.participants, { email: "outsider@gmail.com" });
+			await createParticipant(repos.participants, {
+				email: "outsider@gmail.com",
+			});
 			const eventId = repos.events.getAll()[0].id;
 			expect(
-				(await registerParticipant(repos, repos.participants.getAll()[0].id, eventId)).result,
+				(
+					await registerParticipant(
+						repos,
+						repos.participants.getAll()[0].id,
+						eventId,
+					)
+				).result,
 			).toBe(-1);
 
 			tick();
-			await createParticipant(repos.participants, { email: "emp@business.org" });
+			await createParticipant(repos.participants, {
+				email: "emp@business.org",
+			});
 			expect(
-				(await registerParticipant(repos, repos.participants.getAll()[1].id, eventId)).result,
+				(
+					await registerParticipant(
+						repos,
+						repos.participants.getAll()[1].id,
+						eventId,
+					)
+				).result,
 			).toBe(1);
 
 			tick();
 			await createParticipant(repos.participants, { email: "org@company.com" });
 			expect(
-				(await registerParticipant(repos, repos.participants.getAll()[2].id, eventId)).result,
+				(
+					await registerParticipant(
+						repos,
+						repos.participants.getAll()[2].id,
+						eventId,
+					)
+				).result,
 			).toBe(1);
 		});
 
@@ -185,7 +251,13 @@ describe("domain use-cases (reference scenarios)", () => {
 			});
 			const eventId = repos.events.getAll()[0].id;
 			expect(
-				(await registerParticipant(repos, repos.participants.getAll()[0].id, eventId)).result,
+				(
+					await registerParticipant(
+						repos,
+						repos.participants.getAll()[0].id,
+						eventId,
+					)
+				).result,
 			).toBe(-1);
 
 			tick();
@@ -194,7 +266,13 @@ describe("domain use-cases (reference scenarios)", () => {
 				skill: "BEGINNER",
 			});
 			expect(
-				(await registerParticipant(repos, repos.participants.getAll()[1].id, eventId)).result,
+				(
+					await registerParticipant(
+						repos,
+						repos.participants.getAll()[1].id,
+						eventId,
+					)
+				).result,
 			).toBe(1);
 		});
 
@@ -225,7 +303,9 @@ describe("domain use-cases (reference scenarios)", () => {
 			expect((await registerParticipant(repos, pA, eventId)).result).toBe(1);
 			expect((await registerParticipant(repos, pB, eventId)).result).toBe(0);
 			expect(repos.events.getAll()[0].participantIds).toEqual([pA]);
-			expect(waitlistWithoutTimestamps(repos)).toEqual([{ eventId, participantId: pB }]);
+			expect(waitlistWithoutTimestamps(repos)).toEqual([
+				{ eventId, participantId: pB },
+			]);
 		});
 
 		it("waitlist is FIFO for the same event", async () => {
@@ -262,7 +342,9 @@ describe("domain use-cases (reference scenarios)", () => {
 			const eventId = repos.events.getAll()[0].id;
 			const participantId = repos.participants.getAll()[0].id;
 
-			expect((await cancelRegistration(repos, participantId, eventId)).result).toBe(-1);
+			expect(
+				(await cancelRegistration(repos, participantId, eventId)).result,
+			).toBe(-1);
 		});
 
 		it("removes participant from waitlist only", async () => {

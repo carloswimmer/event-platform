@@ -1,15 +1,15 @@
 export {
+	type EventDocument,
 	EventModel,
 	toEventDto,
-	type EventDocument,
 } from "./event.model";
 export {
+	type ParticipantDocument,
 	ParticipantModel,
 	toParticipantDto,
-	type ParticipantDocument,
 } from "./participant.model";
 export {
-	WaitlistEntryModel,
 	toWaitlistEntryDto,
 	type WaitlistEntryDocument,
+	WaitlistEntryModel,
 } from "./waitlist-entry.model";

@@ -23,7 +23,7 @@ export default defineConfig(() => ({
 	// Configuration for building your library.
 	// See: https://vite.dev/guide/build.html#library-mode
 	build: {
-		outDir: "../dist/domain",
+		outDir: "../../dist/domain",
 		emptyOutDir: true,
 		reportCompressedSize: true,
 		commonjsOptions: {
@@ -39,8 +39,7 @@ export default defineConfig(() => ({
 			formats: ["es" as const],
 		},
 		rollupOptions: {
-			// External packages that should not be bundled into your library.
-			external: ["@event-platform/shared-types"],
+			external: [],
 		},
 	},
 	test: {

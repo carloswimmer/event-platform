@@ -9,9 +9,9 @@ import {
 	type HydratedDocument,
 	type InferSchemaType,
 	type Model,
-	Schema,
 	model,
 	models,
+	Schema,
 } from "mongoose";
 
 const eventSchema = new Schema(
@@ -42,7 +42,9 @@ const eventSchema = new Schema(
 	},
 );
 
-export type EventDocument = HydratedDocument<InferSchemaType<typeof eventSchema>>;
+export type EventDocument = HydratedDocument<
+	InferSchemaType<typeof eventSchema>
+>;
 
 export const EventModel: Model<EventDocument> =
 	(models.Event as Model<EventDocument> | undefined) ??

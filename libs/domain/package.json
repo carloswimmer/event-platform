@@ -5,7 +5,7 @@
 	"type": "module",
 	"main": "./index.js",
 	"types": "./index.d.ts",
-  "dependencies": {
-    "@event-platform/shared-types": "workspace:*"
-  }
+	"dependencies": {
+		"@event-platform/shared-types": "workspace:*"
+	}
 }

@@ -8,7 +8,5 @@ export function validateParticipantSkill(skill?: string): boolean {
 }
 
 export function validateConferenceEmail(email: string): boolean {
-	return (
-		email.includes("@business.org") || email.includes("@company.com")
-	);
+	return email.includes("@business.org") || email.includes("@company.com");
 }

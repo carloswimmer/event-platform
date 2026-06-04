@@ -5,7 +5,10 @@ import type {
 	CreateParticipantRequest,
 	ParticipantDto,
 } from "@event-platform/shared-types";
-import { ParticipantModel, toParticipantDto } from "../models/participant.model";
+import {
+	ParticipantModel,
+	toParticipantDto,
+} from "../models/participant.model";
 import { repositories } from "../repositories";
 
 export class ParticipantsService {

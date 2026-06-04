@@ -3,9 +3,9 @@ import {
 	type HydratedDocument,
 	type InferSchemaType,
 	type Model,
-	Schema,
 	model,
 	models,
+	Schema,
 } from "mongoose";
 
 const waitlistEntrySchema = new Schema(

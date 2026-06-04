@@ -1,7 +1,7 @@
 import {
 	EVENT_TYPES,
-	SKILLS,
 	type EventType,
+	SKILLS,
 	type Skill,
 } from "@event-platform/shared-types";
 

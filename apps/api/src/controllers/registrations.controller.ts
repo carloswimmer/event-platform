@@ -9,10 +9,7 @@ export async function registerParticipant(
 	const { eventId } = req.params;
 	const { participantId } = req.body;
 
-	const response = await registrationsService.register(
-		eventId,
-		participantId,
-	);
+	const response = await registrationsService.register(eventId, participantId);
 	sendApiResponse(res, response);
 }
 

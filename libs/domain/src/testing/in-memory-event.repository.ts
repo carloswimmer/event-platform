@@ -26,10 +26,7 @@ export class InMemoryEventRepository implements EventRepository {
 		return event;
 	}
 
-	async addParticipant(
-		eventId: string,
-		participantId: string,
-	): Promise<void> {
+	async addParticipant(eventId: string, participantId: string): Promise<void> {
 		const event = this.events.get(eventId);
 		if (!event) {
 			throw new Error(`Event not found: ${eventId}`);

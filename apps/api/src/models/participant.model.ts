@@ -1,15 +1,15 @@
 import {
-	SKILLS,
 	type ParticipantDto,
+	SKILLS,
 	type Skill,
 } from "@event-platform/shared-types";
 import {
 	type HydratedDocument,
 	type InferSchemaType,
 	type Model,
-	Schema,
 	model,
 	models,
+	Schema,
 } from "mongoose";
 
 const participantSchema = new Schema(

@@ -1,11 +1,14 @@
+import type { WaitlistRepository } from "@event-platform/domain";
 import {
 	type CancelRegistrationDeps,
 	cancelRegistration,
 	type RegisterParticipantDeps,
 	registerParticipant,
 } from "@event-platform/domain";
-import type { ApiResponse, WaitlistEntryDto } from "@event-platform/shared-types";
-import type { WaitlistRepository } from "@event-platform/domain";
+import type {
+	ApiResponse,
+	WaitlistEntryDto,
+} from "@event-platform/shared-types";
 import { repositories } from "../repositories";
 
 /**

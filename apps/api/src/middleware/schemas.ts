@@ -2,9 +2,7 @@ import type { EventType, Skill } from "@event-platform/shared-types";
 import { EVENT_TYPES, SKILLS } from "@event-platform/shared-types";
 import { z } from "zod";
 
-const objectIdSchema = z
-	.string()
-	.regex(/^[a-f\d]{24}$/i, "Invalid id");
+const objectIdSchema = z.string().regex(/^[a-f\d]{24}$/i, "Invalid id");
 
 const eventTypeSchema = z.enum(
 	EVENT_TYPES as [EventType, EventType, ...EventType[]],
