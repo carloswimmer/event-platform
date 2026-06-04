@@ -8,6 +8,7 @@ import {
 import {
 	type HydratedDocument,
 	type InferSchemaType,
+	type Model,
 	Schema,
 	model,
 	models,
@@ -43,8 +44,9 @@ const eventSchema = new Schema(
 
 export type EventDocument = HydratedDocument<InferSchemaType<typeof eventSchema>>;
 
-export const EventModel =
-	models.Event ?? model<EventDocument>("Event", eventSchema);
+export const EventModel: Model<EventDocument> =
+	(models.Event as Model<EventDocument> | undefined) ??
+	model<EventDocument>("Event", eventSchema);
 
 export function toEventDto(doc: EventDocument): EventDto {
 	return {

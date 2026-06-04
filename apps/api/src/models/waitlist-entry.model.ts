@@ -2,6 +2,7 @@ import type { WaitlistEntryDto } from "@event-platform/shared-types";
 import {
 	type HydratedDocument,
 	type InferSchemaType,
+	type Model,
 	Schema,
 	model,
 	models,
@@ -36,8 +37,8 @@ export type WaitlistEntryDocument = HydratedDocument<
 	InferSchemaType<typeof waitlistEntrySchema>
 >;
 
-export const WaitlistEntryModel =
-	models.WaitlistEntry ??
+export const WaitlistEntryModel: Model<WaitlistEntryDocument> =
+	(models.WaitlistEntry as Model<WaitlistEntryDocument> | undefined) ??
 	model<WaitlistEntryDocument>("WaitlistEntry", waitlistEntrySchema);
 
 export function toWaitlistEntryDto(

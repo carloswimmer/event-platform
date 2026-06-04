@@ -6,6 +6,7 @@ import {
 import {
 	type HydratedDocument,
 	type InferSchemaType,
+	type Model,
 	Schema,
 	model,
 	models,
@@ -36,8 +37,8 @@ export type ParticipantDocument = HydratedDocument<
 	InferSchemaType<typeof participantSchema>
 >;
 
-export const ParticipantModel =
-	models.Participant ??
+export const ParticipantModel: Model<ParticipantDocument> =
+	(models.Participant as Model<ParticipantDocument> | undefined) ??
 	model<ParticipantDocument>("Participant", participantSchema);
 
 export function toParticipantDto(doc: ParticipantDocument): ParticipantDto {
