@@ -70,6 +70,7 @@
 		"mongoose": "^9.6.3",
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0",
-		"react-router-dom": "6.30.3"
+		"react-router-dom": "6.30.3",
+		"zod": "^4.4.3"
 	}
 }

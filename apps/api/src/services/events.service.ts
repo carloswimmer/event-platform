@@ -5,6 +5,7 @@ import type {
 	CreateEventRequest,
 	EventDto,
 } from "@event-platform/shared-types";
+import { EventModel, toEventDto } from "../models/event.model";
 import { repositories } from "../repositories";
 
 export class EventsService {
@@ -16,6 +17,11 @@ export class EventsService {
 
 	async getById(id: string): Promise<EventDto | null> {
 		return this.events.findById(id);
+	}
+
+	async list(): Promise<EventDto[]> {
+		const docs = await EventModel.find().sort({ _id: 1 });
+		return docs.map(toEventDto);
 	}
 }
 

@@ -5,6 +5,7 @@ import type {
 	CreateParticipantRequest,
 	ParticipantDto,
 } from "@event-platform/shared-types";
+import { ParticipantModel, toParticipantDto } from "../models/participant.model";
 import { repositories } from "../repositories";
 
 export class ParticipantsService {
@@ -20,6 +21,11 @@ export class ParticipantsService {
 
 	async getById(id: string): Promise<ParticipantDto | null> {
 		return this.participants.findById(id);
+	}
+
+	async list(): Promise<ParticipantDto[]> {
+		const docs = await ParticipantModel.find().sort({ _id: 1 });
+		return docs.map(toParticipantDto);
 	}
 }
 

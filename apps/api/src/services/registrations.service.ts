@@ -4,7 +4,8 @@ import {
 	type RegisterParticipantDeps,
 	registerParticipant,
 } from "@event-platform/domain";
-import type { ApiResponse } from "@event-platform/shared-types";
+import type { ApiResponse, WaitlistEntryDto } from "@event-platform/shared-types";
+import type { WaitlistRepository } from "@event-platform/domain";
 import { repositories } from "../repositories";
 
 /**
@@ -17,6 +18,7 @@ export class RegistrationsService {
 	constructor(
 		private readonly deps: RegisterParticipantDeps &
 			CancelRegistrationDeps = repositories,
+		private readonly waitlist: WaitlistRepository = repositories.waitlist,
 	) {}
 
 	async register(
@@ -31,6 +33,15 @@ export class RegistrationsService {
 		participantId: string,
 	): Promise<ApiResponse<void>> {
 		return cancelRegistration(this.deps, participantId, eventId);
+	}
+
+	async getWaitlist(eventId: string): Promise<WaitlistEntryDto[] | null> {
+		const event = await this.deps.events.findById(eventId);
+		if (!event) {
+			return null;
+		}
+
+		return this.waitlist.listForEvent(eventId);
 	}
 }
 
